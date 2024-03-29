@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 // Import all shirt components
@@ -20,12 +20,20 @@ const shirtData = {
 };
 
 const CustomizationPage = () => {
-  // Get the shirt type parameter from the URL
-  const { shirtType } = useParams();
+  // Get the shirt type and material from the URL params
+  const { shirtType, material } = useParams();
+  let cart = [];
 
   // Render the selected shirt component with its props
   const RenderShirt = shirtComponents[shirtType];
   const shirtProps = shirtData[shirtType];
+
+  // Function to handle adding item to the cart
+  const handleAddToCart = () => {
+    const item = { type: shirtType, material: material, customization: shirtProps };
+    cart.push(item); // Add the item to the cart
+    console.log('Item added to cart:', item);
+  };
 
   return (
     <div>
@@ -33,6 +41,7 @@ const CustomizationPage = () => {
       {/* Render the selected shirt component */}
       {RenderShirt && <RenderShirt {...shirtProps} />}
       {!RenderShirt && <div>Error: Shirt type not found</div>} {/* Handle unknown shirt types */}
+      <button onClick={handleAddToCart}>Add to Cart</button>
     </div>
   );
 };
