@@ -1,13 +1,9 @@
 import React from 'react';
 
-const Shirt = ({ title, onSelect }) => {
-  const handleClick = () => {
-    onSelect(title);
-  };
-
+const Shirt = ({ title }) => {
   return (
     <div>
-      <h3 onClick={handleClick}>{title}</h3>
+      <h3>{title}</h3>
     </div>
   );
 };
