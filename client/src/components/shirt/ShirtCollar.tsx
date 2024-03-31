@@ -1,24 +1,16 @@
-interface ShirtProps {
-  shirt: any
-}
+import { useState } from "react";
+import { CirclePicker, ColorResult } from "react-color";
 
-const ShirtsCollar = ({shirt}: ShirtProps) => {
+const ShirtsCollar = () => {
 
-   // Check if styles is not null or undefined
- if (!shirt.styles) {
-  // Return null or some fallback content
-  return null;
-}
-
-
-  const styles: { [key: string]: { [key: string]: string } } = {
-    '.s0': { fill:  '#1c202b' },
-    '.s1': { fill: '#0a1826' },
-    '.s2': { fill: '#ffffff' },
-    '.s3': { fill: '#ffffff'},
-    '.s4': { fill: '#ffffff'},
-  };
-
+const [styles, setStyles] = useState({
+  '.s0': { fill:  '#1c202b', name: 'stayle 1'},
+  '.s1': { fill: '#0a1826', name: 'stayle 2' },
+  '.s2': { fill: '#ffffff', name: 'stayle 3' },
+  '.s3': { fill: '#ffffff', name: 'stayle 4'},
+  '.s4': { fill: '#ffffff', name:'style 5'}, }
+);
+const [openPicker, setOpenPicker] = useState<string | null>(null);
   const parseStyles = () => {
     return Object.keys(styles).map((selector) => {
       const properties = styles[selector];
@@ -29,10 +21,54 @@ const ShirtsCollar = ({shirt}: ShirtProps) => {
     });
   };
 
+  const updateStyleProperty = (selector: string, property: string, value: string) => {
+    setStyles(prevStyles => ({
+      ...prevStyles,
+      [selector]: {
+        ...prevStyles[selector],
+        [property]: value
+      }
+    }));
+  };
+
+  // Handle click on style to change fill color
+  const handleClick = (selector: string) => {
+    setOpenPicker(selector);
+  };
+
+  // Function to handle color change
+  const handleColorChangeWrapper = (selector: string) => {
+    return (color: ColorResult) => {
+      updateStyleProperty(selector, 'fill', color.hex);
+    };
+  };
+
   const svgStyles = parseStyles().join('\n');
 
   return (
-    <svg
+   <div>
+
+<div style={{ display: 'flex', flexDirection: 'row' }}>
+        {Object.keys(styles).map((selector, index) => (
+          <div key={index} style={{ marginBottom: '10px' }}>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={() => handleClick(selector)}
+            >
+              {styles[selector].name}
+            </span>
+            {/* CirclePicker for each style */}
+            {openPicker === selector && (
+              <CirclePicker
+                color={styles[selector].fill}
+                onChange={handleColorChangeWrapper(selector)}
+                key={selector}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+     <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 531 337"
     width={531}
@@ -185,6 +221,7 @@ const ShirtsCollar = ({shirt}: ShirtProps) => {
       </g>
     </g>
   </svg>
+   </div>
   );
 };
 

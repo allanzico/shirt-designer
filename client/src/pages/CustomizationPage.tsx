@@ -4,11 +4,13 @@ import { useParams } from 'react-router-dom';
 // Import all shirt components
 import FootballJersey from '../components/shirt/FootballJersey';
 import FootballJersey2 from '../components/shirt/FootballJersey2';
+import ShirtCollar from '../components/shirt/ShirtCollar';
 
 // Define mapping between shirt types and their components
 const shirtComponents = {
   FootballJersey,
   FootballJersey2,
+  ShirtCollar,
   // Add more shirt components here if needed
 };
 
@@ -16,6 +18,7 @@ const shirtComponents = {
 const shirtData = {
   FootballJersey: { colors: { collar: '#FFFFFF', arm: '#FF0000', sleeve: '#0000FF', body: '#00FF00' }, texts: [] },
   FootballJersey2: { colors: { collar: '#000000', arm: '#FFFFFF', sleeve: '#FF00FF', body: '#FFFF00' }, texts: [] },
+  ShirtCollar: { colors: { collar: '#000000', arm: '#FFFFFF', sleeve: '#FF00FF', body: '#FFFF00' }, texts: [] },
   // Add more shirt data here if needed
 };
 

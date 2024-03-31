@@ -1,4 +1,4 @@
-import ShirtsCollar from 'components/shirt/ShirtsCollar'
+import ShirtsCollar from 'components/shirt/ShirtCollar'
 import { shirts } from 'data'
 import React from 'react'
 import { Link } from 'react-router-dom'

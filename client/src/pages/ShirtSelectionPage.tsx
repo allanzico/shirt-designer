@@ -16,6 +16,11 @@ const ShirtSelectionPage = () => {
       // Add more material options if needed
     ]},
     // Add more shirts with their base prices and material options if needed
+    { title: 'Shirt collar', type: 'ShirtCollar', basePrice: 39.99, materialOptions: [
+        { name: 'Nylon', priceAdjustment: 0 },
+        { name: 'Cotton', priceAdjustment: 15 }, // Example: Cotton material increases the price by $15
+        // Add more material options if needed
+      ]},
   ]);
 
   // State to manage material selection for each shirt
