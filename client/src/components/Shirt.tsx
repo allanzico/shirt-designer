@@ -20,7 +20,7 @@ const Shirt = ({ shirt, selectedMaterials, handleMaterialChange, calculateTotalP
               {shirt.materialOptions.map(option => (
                 <option key={option.name} value={option.name}
                 className="absolute right-0 z-10 w-56 origin-top-right rounded-sm bg-white border border-gray-200"
-                >{option.name}</option>
+                >{option.name} +${option.priceAdjustment}</option>
               ))}
             </select>
           </div>

@@ -14,6 +14,7 @@ const ShirtsCollar = (props) => {
     });
   };
 
+
   const svgStyles = parseStyles().join('\n');
 
   return (

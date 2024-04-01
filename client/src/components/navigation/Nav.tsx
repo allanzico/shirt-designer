@@ -1,17 +1,19 @@
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import useCartStore from 'store/cartStore'
 
 function Nav() {
-  const cart = [{ variantQuantity: 0 }]
-  const [cartItems, setCartItems] = useState(0)
+  
+  const cart = useCartStore(
+    (state) => state.cart
+  );
+  const [cartItems, setCartItems] = useState(
+    0
+  )
 
   useEffect(() => {
-    let numItems = 0
-    cart.forEach(item => {
-      numItems += item.variantQuantity
-    })
-    setCartItems(numItems)
+    setCartItems(cart.length)
   }, [cart])
 
   return (

@@ -6,6 +6,7 @@ import { HexColorPicker } from "react-colorful";
 import FootballJersey from '../components/shirt/FootballJersey';
 import FootballJersey2 from '../components/shirt/FootballJersey2';
 import ShirtCollar from '../components/shirt/ShirtCollar';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 // Define mapping between shirt types and their components
 const shirtComponents = {
@@ -27,35 +28,77 @@ const shirtData = {
       '.s3': { fill: '#ffffff', name: 'style 4'},
       '.s4': { fill: '#ffffff', name:'style 5'}, 
     },
-    texts: [] 
+    texts: [],
+    players: [],
   },
   // Add more shirt data here if needed
 };
 
 const CustomizationPage = () => {
-  // Get the shirt type and material from the URL params
   const { shirtType, material } = useParams();
+  const [openOptions, setOpenOptions] = useState<string | null>(null);
+  const [clickedStyle, setClickedStyle] = useState<string | null>(null);
   const [openPicker, setOpenPicker] = useState<string | null>(null);
   const [styles, setStyles] = useState(shirtData[shirtType].styles);
-   // Handle click on style to change fill color
-   const handleClick = (selector: string) => {
+  const [customizations, setCustomizations] = useState<any[]>([]);
+  const [players, setPlayers] = useState([]); // State to store player data
+
+
+  const handlePlayerAdded = (playerData) => {
+    setPlayers((prevPlayers) => [...prevPlayers, playerData]);
+  };
+
+  // Handle click on main link to toggle visibility of nested options
+  const handleMainLinkClick = (option: string) => {
+    setOpenOptions(openOptions === option ? null : option);
+  };
+
+  // Handle click on style label to open color picker
+  const handleStyleClick = (selector: string) => {
+    setClickedStyle(selector);
     setOpenPicker(selector);
   };
 
-  const updateStyleProperty = (selector: string, property: string, value: string) => {
-    setStyles(prevStyles => ({
+  // Function to close color picker
+  const handleClosePicker = () => {
+    setOpenPicker(null);
+  };
+
+  // Function to reset color to original one
+  const handleResetColor = (selector: string) => {
+    const originalColor = shirtData[shirtType].styles[selector].fill;
+    setStyles((prevStyles) => ({
       ...prevStyles,
       [selector]: {
         ...prevStyles[selector],
-        [property]: value
-      }
+        fill: originalColor,
+      },
     }));
   };
+
+  const updateStyleProperty = (selector: string, property: string, value: string) => {
+    setStyles((prevStyles) => ({
+      ...prevStyles,
+      [selector]: {
+        ...prevStyles[selector],
+        [property]: value,
+      },
+    }));
+  };
+
   // Function to handle color change
-  const handleColorChangeWrapper = (selector: string) => {
-    return (color) => {
-      updateStyleProperty(selector, 'fill', color);
+  const handleColorChange = (selector: string, color: string) => {
+    updateStyleProperty(selector, 'fill', color);
+  };
+
+  // Function to save customizations
+  const handleSaveCustomization = () => {
+    const customization = {
+      shirtType,
+      material,
+      styles: { ...styles },
     };
+    setCustomizations((prevCustomizations) => [...prevCustomizations, customization]);
   };
 
   // Render the selected shirt component with its props
@@ -63,41 +106,77 @@ const CustomizationPage = () => {
   const shirtProps = {
     colors: shirtData[shirtType].colors,
     styles: styles,
-    updateStyleProperty: updateStyleProperty
+    updateStyleProperty: updateStyleProperty,
   };
 
   return (
-    <div className="container mx-auto flex items-center flex-wrap flex-col pt-4 pb-12">
-      <span className="text-2xl font-semibold">{shirtType}</span>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {Object.keys(styles).map((selector, index) => (
-          <div key={index} style={{ marginBottom: '10px' }}>
-            <span
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleClick(selector)}
-            >
-              {styles[selector].name}
-            </span>
-            {/* CirclePicker for each style */}
-            {openPicker === selector && (
-              // <CirclePicker
-              //   color={styles[selector].fill}
-              //   onChange={handleColorChangeWrapper(selector)}
-              //   key={selector}
-              // />
-              <HexColorPicker color={styles[selector].fill} onChange={handleColorChangeWrapper(selector)} key={selector} />
+    <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+      <div className="sidebar">
+        <div className="sidebar-column">
+          <ul>
+            <li className="main-link cursor-pointer" onClick={() => handleMainLinkClick('Styles')}>
+              Styles
+            </li>
+            {openOptions === 'Styles' && (
+              <ul className="nested-links cursor-pointer">
+                {Object.keys(styles).map((selector, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleStyleClick(selector)}
+                    style={{ backgroundColor: clickedStyle === selector ? '#ccc' : 'transparent' }}
+                  >
+                    {styles[selector].name}
+                  </li>
+                ))}
+              </ul>
             )}
-          </div>
-        ))}
+            
+          </ul>
+          <button onClick={handleSaveCustomization}>Save Customization</button>
+        </div>
+        <div className="sidebar-column">
+          <ul>
+            <li className="main-link" onClick={() => handleMainLinkClick('Texts')}>
+              Texts
+            </li>
+            {openOptions === 'Texts' && (
+              <ul className="nested-links">
+                {shirtData[shirtType].texts.map((text, index) => (
+                  <li key={index}>{text}</li>
+                ))}
+              </ul>
+            )}
+          </ul>
+        </div>
       </div>
-      <div>
+      <div className="flex-1">
         {/* Render the selected shirt component */}
         {RenderShirt && <RenderShirt {...shirtProps} />}
         {!RenderShirt && <div>Error: Shirt type not found</div>} {/* Handle unknown shirt types */}
-        {/* <button onClick={handleAddToCart}>Add to Cart</button> */}
+      </div>
+      <div className="flex-1">
+        {/* Display color pickers */}
+        {openPicker && (
+          <div className="flex flex-col gap-1">
+            <HexColorPicker
+              color={styles[openPicker].fill}
+              onChange={(color) => handleColorChange(openPicker, color)}
+            />
+            <div className="flex flex-row gap-1">
+              <input
+                type="text"
+                value={styles[openPicker].fill}
+                onChange={(e) => handleColorChange(openPicker, e.target.value)}
+                className="text-sm border border-gray-300 rounded-sm px-2 py-1"
+              />
+              <ArrowPathIcon className="h-6 w-6 cursor-pointer" onClick={() => handleResetColor(openPicker)} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
 
 export default CustomizationPage;
