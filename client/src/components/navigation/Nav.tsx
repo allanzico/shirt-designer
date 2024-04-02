@@ -13,7 +13,11 @@ function Nav() {
   )
 
   useEffect(() => {
-    setCartItems(cart.length)
+    const items = cart.reduce(
+      (acc, item) => acc + item.cartItems,
+      0
+    )
+    setCartItems(items)
   }, [cart])
 
   return (
