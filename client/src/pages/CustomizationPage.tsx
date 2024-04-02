@@ -7,6 +7,7 @@ import FootballJersey from '../components/shirt/FootballJersey';
 import FootballJersey2 from '../components/shirt/FootballJersey2';
 import ShirtCollar from '../components/shirt/ShirtCollar';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 // Define mapping between shirt types and their components
 const shirtComponents = {
@@ -110,35 +111,36 @@ const CustomizationPage = () => {
   };
 
   return (
-    <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-      <div className="sidebar">
-        <div className="sidebar-column">
-          <ul>
-            <li className="main-link cursor-pointer" onClick={() => handleMainLinkClick('Styles')}>
+    <div className="grid grid-cols-12 gap-4 container mx-auto items-center flex-wrap pt-4 pb-12">
+
+    <div className="col-span-12 md:col-span-4">
+    <div className="flex flex-row gap-2">
+      <ul>
+            <li className={`px-1 py-1 rounded-sm ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
               Styles
             </li>
-            {openOptions === 'Styles' && (
+            <li className={`px-1 py-1 rounded-sm ${openOptions === 'Texts' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
+              Texts
+            </li>
+            <li className={`px-1 py-1 rounded-sm ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
+              Players
+            </li>
+            <button onClick={handleSaveCustomization}>Save Customization</button>
+          </ul>
+          <ul>
+          {openOptions === 'Styles' && (
               <ul className="nested-links cursor-pointer">
                 {Object.keys(styles).map((selector, index) => (
                   <li
                     key={index}
                     onClick={() => handleStyleClick(selector)}
-                    style={{ backgroundColor: clickedStyle === selector ? '#ccc' : 'transparent' }}
+                    className={`px-1 py-1 rounded-sm ${clickedStyle === selector && 'bg-gray-200 '}`}
                   >
                     {styles[selector].name}
                   </li>
                 ))}
               </ul>
             )}
-            
-          </ul>
-          <button onClick={handleSaveCustomization}>Save Customization</button>
-        </div>
-        <div className="sidebar-column">
-          <ul>
-            <li className="main-link" onClick={() => handleMainLinkClick('Texts')}>
-              Texts
-            </li>
             {openOptions === 'Texts' && (
               <ul className="nested-links">
                 {shirtData[shirtType].texts.map((text, index) => (
@@ -147,14 +149,22 @@ const CustomizationPage = () => {
               </ul>
             )}
           </ul>
-        </div>
+         
       </div>
-      <div className="flex-1">
+    </div>
+
+
+    <div className="col-span-12 md:col-span-6">
+    <div className="flex-1">
         {/* Render the selected shirt component */}
         {RenderShirt && <RenderShirt {...shirtProps} />}
         {!RenderShirt && <div>Error: Shirt type not found</div>} {/* Handle unknown shirt types */}
       </div>
-      <div className="flex-1">
+    </div>
+
+
+    <div className="col-span-12 md:col-span-2">
+    <div className="flex-1">
         {/* Display color pickers */}
         {openPicker && (
           <div className="flex flex-col gap-1">
@@ -162,19 +172,22 @@ const CustomizationPage = () => {
               color={styles[openPicker].fill}
               onChange={(color) => handleColorChange(openPicker, color)}
             />
-            <div className="flex flex-row gap-1">
+            <div className="flex flex-row gap-1 justify-between">
               <input
                 type="text"
                 value={styles[openPicker].fill}
                 onChange={(e) => handleColorChange(openPicker, e.target.value)}
-                className="text-sm border border-gray-300 rounded-sm px-2 py-1"
+                className="text-sm border w-1/2 border-gray-300 rounded-sm py-1 px-1 "
               />
+              <XMarkIcon className="h-6 w-6 cursor-pointer" onClick={handleClosePicker} />
               <ArrowPathIcon className="h-6 w-6 cursor-pointer" onClick={() => handleResetColor(openPicker)} />
             </div>
           </div>
         )}
       </div>
     </div>
+
+</div>
   );
 };
 
