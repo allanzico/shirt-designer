@@ -106,94 +106,100 @@ const CustomizationPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-4 container mx-auto items-center flex-wrap pt-4 pb-12">
+    <div className='flex flex-col gap-4'>
+          <div className="grid grid-cols-12 gap-4 container mx-auto items-center flex-wrap pt-4 pb-12">
 
-    <div className="col-span-12 md:col-span-4">
-    <div className="flex flex-row gap-8">
+<div className="col-span-12 md:col-span-4">
+<div className="flex flex-row gap-8">
+  <ul>
+        <li className={`px-2 py-1 rounded-sm ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
+          Styles
+        </li>
+        <li className={`px-2 py-1 rounded-sm ${openOptions === 'Texts' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
+          Texts
+        </li>
+        <li className={`px-2 py-1 rounded-sm ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Players')}>
+          Players
+        </li>
+        <button onClick={handleSaveCustomization}>Save Customization</button>
+      </ul>
       <ul>
-            <li className={`px-2 py-1 rounded-sm ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
-              Styles
-            </li>
-            <li className={`px-2 py-1 rounded-sm ${openOptions === 'Texts' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
-              Texts
-            </li>
-            <li className={`px-2 py-1 rounded-sm ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Players')}>
-              Players
-            </li>
-            <button onClick={handleSaveCustomization}>Save Customization</button>
-          </ul>
-          <ul>
-          {openOptions === 'Styles' && (
-              <ul className="nested-links cursor-pointer">
-                {Object.keys(styles).map((selector, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleStyleClick(selector)}
-                    className={`px-2 py-1 rounded-sm ${clickedStyle === selector && 'bg-gray-200 '}`}
-                  >
-                    {styles[selector].name}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {openOptions === 'Players' && (
-            <ul >
-              {/* Player form component */}
-              <li>
-                <PlayerForm onPlayerAdded={handlePlayerAdded} />
+      {openOptions === 'Styles' && (
+          <ul className="nested-links cursor-pointer">
+            {Object.keys(styles).map((selector, index) => (
+              <li
+                key={index}
+                onClick={() => handleStyleClick(selector)}
+                className={`px-2 py-1 rounded-sm ${clickedStyle === selector && 'bg-gray-200 '}`}
+              >
+                {styles[selector].name}
               </li>
-              {/* Display player data */}
-              {players.map((player, index) => (
-                <div className='flex w-full flex-row mt-4 text-sm'>
-                  <li  key={index} className='bg-gray-100 px-2 py-1'>{player.number} {player.name} {player.size}</li>
-                  <div className='flex items-center justify-center'>
-                  <TrashIcon className="h-4 w-4 cursor-pointer" onClick={() => setPlayers((prevPlayers) => prevPlayers.filter((_, i) => i !== index))} />
-                  </div>
-                </div>
-                
-              ))}
-              </ul>
-            )}
+            ))}
           </ul>
-         
-      </div>
-    </div>
-
-
-    <div className="col-span-12 md:col-span-6">
-    <div className="flex-1">
-        {/* Render the selected shirt component */}
-        {RenderShirt && <RenderShirt {...shirtProps} />}
-        {!RenderShirt && <div>Error: Shirt type not found</div>} {/* Handle unknown shirt types */}
-      </div>
-    </div>
-
-
-    <div className="col-span-12 md:col-span-2">
-    <div className="flex-1">
-        {/* Display color pickers */}
-        {openPicker && (
-          <div className="flex flex-col gap-1">
-            <HexColorPicker
-              color={styles[openPicker].fill}
-              onChange={(color) => handleColorChange(openPicker, color)}
-            />
-            <div className="flex flex-row gap-1 justify-between">
-              <input
-                type="text"
-                value={styles[openPicker].fill}
-                onChange={(e) => handleColorChange(openPicker, e.target.value)}
-                className="text-sm border w-1/2 border-gray-300 rounded-sm py-1 px-1 "
-              />
-              <XMarkIcon className="h-6 w-6 cursor-pointer" onClick={handleClosePicker} />
-              <ArrowPathIcon className="h-6 w-6 cursor-pointer" onClick={() => handleResetColor(openPicker)} />
-            </div>
-          </div>
         )}
+        {openOptions === 'Players' && (
+        <ul >
+          {/* Player form component */}
+          <li>
+            <PlayerForm onPlayerAdded={handlePlayerAdded} />
+          </li>
+          {/* Display player data */}
+          {players.map((player, index) => (
+            <div className='flex w-full flex-row mt-4 text-sm'>
+              <li  key={index} className='bg-gray-100 px-2 py-1'>{player.number} {player.name} {player.size}</li>
+              <div className='flex items-center justify-center'>
+              <TrashIcon className="h-4 w-4 cursor-pointer" onClick={() => setPlayers((prevPlayers) => prevPlayers.filter((_, i) => i !== index))} />
+              </div>
+            </div>
+            
+          ))}
+          </ul>
+        )}
+      </ul>
+     
+  </div>
+</div>
+
+
+<div className="col-span-12 md:col-span-6">
+<div className="flex-1">
+    {/* Render the selected shirt component */}
+    {RenderShirt && <RenderShirt {...shirtProps} />}
+    {!RenderShirt && <div>Error: Shirt type not found</div>} {/* Handle unknown shirt types */}
+  </div>
+</div>
+
+
+<div className="col-span-12 md:col-span-2">
+<div className="flex-1">
+    {/* Display color pickers */}
+    {openPicker && (
+      <div className="flex flex-col gap-1">
+        <HexColorPicker
+          color={styles[openPicker].fill}
+          onChange={(color) => handleColorChange(openPicker, color)}
+        />
+        <div className="flex flex-row gap-1 justify-between">
+          <input
+            type="text"
+            value={styles[openPicker].fill}
+            onChange={(e) => handleColorChange(openPicker, e.target.value)}
+            className="text-sm border w-1/2 border-gray-300 rounded-sm py-1 px-1 "
+          />
+          <XMarkIcon className="h-6 w-6 cursor-pointer" onClick={handleClosePicker} />
+          <ArrowPathIcon className="h-6 w-6 cursor-pointer" onClick={() => handleResetColor(openPicker)} />
+        </div>
       </div>
-    </div>
+    )}
+  </div>
+</div>
 
 </div>
+<div className="flex flex-col gap-4 container mx-auto items-center justify-center flex-wrap pt-4 pb-12">
+  <div>TEXT</div>
+</div>
+    </div>
+
   );
 };
 
