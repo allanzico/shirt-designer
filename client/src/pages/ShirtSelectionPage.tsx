@@ -6,17 +6,17 @@ import Nav from 'components/navigation/Nav';
 const ShirtSelectionPage = () => {
   // Imaginary database representing stored shirts
   const [shirts] = useState([
-    { title: 'Football Jersey', type: 'FootballJersey', basePrice: 29.99,imageUrl: 'https://source.unsplash.com/random/?shirt', materialOptions: [
-      { name: 'Nylon', priceAdjustment: 0 },
-      { name: 'Cotton', priceAdjustment: 10 }, // Example: Cotton material increases the price by $10
-      // Add more material options if needed
-    ]},
-    { title: 'Football Jersey 2', type: 'FootballJersey2', basePrice: 39.99, 
-    imageUrl: 'https://source.unsplash.com/random/?shirt',materialOptions: [
-      { name: 'Nylon', priceAdjustment: 0 },
-      { name: 'Cotton', priceAdjustment: 15 }, // Example: Cotton material increases the price by $15
-      // Add more material options if needed
-    ]},
+    // { title: 'Football Jersey', type: 'FootballJersey', basePrice: 29.99,imageUrl: 'https://source.unsplash.com/random/?shirt', materialOptions: [
+    //   { name: 'Nylon', priceAdjustment: 0 },
+    //   { name: 'Cotton', priceAdjustment: 10 }, // Example: Cotton material increases the price by $10
+    //   // Add more material options if needed
+    // ]},
+    // { title: 'Football Jersey 2', type: 'FootballJersey2', basePrice: 39.99, 
+    // imageUrl: 'https://source.unsplash.com/random/?shirt',materialOptions: [
+    //   { name: 'Nylon', priceAdjustment: 0 },
+    //   { name: 'Cotton', priceAdjustment: 15 }, // Example: Cotton material increases the price by $15
+    //   // Add more material options if needed
+    // ]},
     // Add more shirts with their base prices and material options if needed
     { title: 'Shirt collar', type: 'ShirtCollar', basePrice: 39.99,
     imageUrl: 'https://source.unsplash.com/random/?shirt',

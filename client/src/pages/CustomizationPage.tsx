@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { HexColorPicker } from "react-colorful";
 import ShirtCollar from '../components/shirt/ShirtCollar';
@@ -7,10 +7,8 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import PlayerForm from 'components/forms/PlayerForm';
 import useCartStore from 'store/cartStore';
 
-// Define mapping between shirt types and their components
 const shirtComponents = {
   ShirtCollar,
-  // Add more shirt components here if needed
 };
 
 // Define mapping between shirt types and their data
@@ -26,7 +24,6 @@ const shirtData = {
     texts: [],
     players: [],
   },
-  // Add more shirt data here if needed
 };
 
 const CustomizationPage = () => {
@@ -34,7 +31,7 @@ const CustomizationPage = () => {
   const [openOptions, setOpenOptions] = useState<string | null>(null);
   const [clickedStyle, setClickedStyle] = useState<string | null>(null);
   const [openPicker, setOpenPicker] = useState<string | null>(null);
-  const [styles, setStyles] = useState(shirtData[shirtType].styles);
+  const [styles, setStyles] = useState<any>(shirtData[shirtType].styles);
   const [customizations, setCustomizations] = useState<any[]>([]);
   const [players, setPlayers] = useState([]); // State to store player data
   const { state } = useLocation();
@@ -123,13 +120,12 @@ const CustomizationPage = () => {
         <div className="col-span-12 md:col-span-4">
           <div className="flex flex-row gap-8">
             <ul>
-              <li className={`px-2 py-1 rounded-sm ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
+              <li className={`px-2 py-1 rounded-sm cursor-pointer ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
                 Styles
               </li>
-              <li className={`px-2 py-1 rounded-sm ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Players')}>
+              <li className={`px-2 py-1 rounded-sm cursor-pointer ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Players')}>
                 Players
               </li>
-              <button onClick={handleSaveCustomization}>Save Customization</button>
             </ul>
             <ul>
               {openOptions === 'Styles' && (
