@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { HexColorPicker } from "react-colorful";
-
-// Import all shirt components
-import FootballJersey from '../components/shirt/FootballJersey';
-import FootballJersey2 from '../components/shirt/FootballJersey2';
 import ShirtCollar from '../components/shirt/ShirtCollar';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import PlayerForm from 'components/forms/PlayerForm';
 
 // Define mapping between shirt types and their components
 const shirtComponents = {
-  FootballJersey,
-  FootballJersey2,
   ShirtCollar,
   // Add more shirt components here if needed
 };
 
 // Define mapping between shirt types and their data
 const shirtData = {
-  FootballJersey: { colors: { collar: '#FFFFFF', arm: '#FF0000', sleeve: '#0000FF', body: '#00FF00' }, texts: [] },
-  FootballJersey2: { colors: { collar: '#000000', arm: '#FFFFFF', sleeve: '#FF00FF', body: '#FFFF00' }, texts: [] },
   ShirtCollar: { 
     styles: {
       '.s0': { fill:  '#1c202b', name: 'style 1'},
@@ -43,6 +36,7 @@ const CustomizationPage = () => {
   const [styles, setStyles] = useState(shirtData[shirtType].styles);
   const [customizations, setCustomizations] = useState<any[]>([]);
   const [players, setPlayers] = useState([]); // State to store player data
+  const {state} = useLocation();
 
 
   const handlePlayerAdded = (playerData) => {
@@ -96,8 +90,9 @@ const CustomizationPage = () => {
   const handleSaveCustomization = () => {
     const customization = {
       shirtType,
-      material,
+      material: state.selectedMaterial.name,
       styles: { ...styles },
+      players,
     };
     setCustomizations((prevCustomizations) => [...prevCustomizations, customization]);
   };
@@ -114,15 +109,15 @@ const CustomizationPage = () => {
     <div className="grid grid-cols-12 gap-4 container mx-auto items-center flex-wrap pt-4 pb-12">
 
     <div className="col-span-12 md:col-span-4">
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-8">
       <ul>
-            <li className={`px-1 py-1 rounded-sm ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
+            <li className={`px-2 py-1 rounded-sm ${openOptions === 'Styles' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Styles')}>
               Styles
             </li>
-            <li className={`px-1 py-1 rounded-sm ${openOptions === 'Texts' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
+            <li className={`px-2 py-1 rounded-sm ${openOptions === 'Texts' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
               Texts
             </li>
-            <li className={`px-1 py-1 rounded-sm ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Texts')}>
+            <li className={`px-2 py-1 rounded-sm ${openOptions === 'Players' && 'bg-green-500 text-white'}`} onClick={() => handleMainLinkClick('Players')}>
               Players
             </li>
             <button onClick={handleSaveCustomization}>Save Customization</button>
@@ -134,18 +129,29 @@ const CustomizationPage = () => {
                   <li
                     key={index}
                     onClick={() => handleStyleClick(selector)}
-                    className={`px-1 py-1 rounded-sm ${clickedStyle === selector && 'bg-gray-200 '}`}
+                    className={`px-2 py-1 rounded-sm ${clickedStyle === selector && 'bg-gray-200 '}`}
                   >
                     {styles[selector].name}
                   </li>
                 ))}
               </ul>
             )}
-            {openOptions === 'Texts' && (
-              <ul className="nested-links">
-                {shirtData[shirtType].texts.map((text, index) => (
-                  <li key={index}>{text}</li>
-                ))}
+            {openOptions === 'Players' && (
+            <ul >
+              {/* Player form component */}
+              <li>
+                <PlayerForm onPlayerAdded={handlePlayerAdded} />
+              </li>
+              {/* Display player data */}
+              {players.map((player, index) => (
+                <div className='flex w-full flex-row mt-4 text-sm'>
+                  <li  key={index} className='bg-gray-100 px-2 py-1'>{player.number} {player.name} {player.size}</li>
+                  <div className='flex items-center justify-center'>
+                  <TrashIcon className="h-4 w-4 cursor-pointer" onClick={() => setPlayers((prevPlayers) => prevPlayers.filter((_, i) => i !== index))} />
+                  </div>
+                </div>
+                
+              ))}
               </ul>
             )}
           </ul>
